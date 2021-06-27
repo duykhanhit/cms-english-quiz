@@ -35,7 +35,6 @@ export default function AddExam() {
   const handleGetMe = async (token) => {
     try {
       const { data } = await getMe(token);
-      setUser(data?.data);
     } catch (error) {
       router.push("/login");
     }

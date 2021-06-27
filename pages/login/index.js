@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 import { useEffect, useState } from "react";
 
-import { login } from "../../api";
+import { getMe, login } from "../../api";
 import { useRouter } from "next/dist/client/router";
 // import axios from "axios";
 
@@ -24,11 +24,19 @@ export default function Login() {
   const [isSuccess, setIsSuccess] = useState(false);
   const router = useRouter();
 
+  const handleGetMe = async (token) => {
+    try {
+      const { data } = await getMe(token);
+      router.push("/manage");
+    } catch (error) {
+      router.push("/login");
+    }
+  };
+
   useEffect(() => {
     const localToken = localStorage.getItem("token");
-    if (localToken) {
-      return router.push("/manage");
-    }
+
+    handleGetMe(localToken);
   }, []);
 
   const handleOnChange = (e) => {
