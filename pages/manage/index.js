@@ -33,7 +33,7 @@ export default function Manage() {
     setToken(localToken);
     handleGetMe(localToken);
     handleGetExams(localToken);
-  }, []);
+  }, [exams]);
 
   const handleGetExams = async (token) => {
     try {
@@ -50,6 +50,7 @@ export default function Manage() {
     try {
       await deleteExam(token, examId);
       notifySuccess();
+      handleGetExams(token);
     } catch (error) {
       notifyFail();
     }

@@ -66,7 +66,9 @@ export default function CardQues(props) {
     const newAns = [...ans];
     newAns.forEach((a) => {
       a.question_id = question._id;
-      delete a._id;
+      if (!a._id) {
+        delete a._id;
+      }
     });
     if (newAns.length !== 4) {
       return notifyFail();
@@ -80,21 +82,29 @@ export default function CardQues(props) {
     }
     e.preventDefault();
     console.log("a", ans);
-    console.log("q", question);
   };
 
   const onSubmitQuestion = async (e) => {
     try {
       const token = localStorage.getItem("token");
-      const { data } = await createQuestion(token, {
-        exam_id: question.exam_id,
-        content: question.content,
-      });
+      if (question._id) {
+        await createQuestion(token, {
+          _id: question._id,
+          exam_id: question.exam_id,
+          content: question.content,
+        });
+      } else {
+        const { data } = await createQuestion(token, {
+          exam_id: question.exam_id,
+          content: question.content,
+        });
 
-      setQuestion({
-        ...question,
-        _id: data.data._id,
-      });
+        setQuestion({
+          ...question,
+          _id: data.data._id,
+        });
+      }
+
       notifySuccess();
     } catch (error) {
       notifyFail();

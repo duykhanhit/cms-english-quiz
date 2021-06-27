@@ -58,8 +58,6 @@ export default function AddExam() {
     e.preventDefault();
   };
 
-  console.log(exam);
-
   return (
     <>
       <Header title="Thêm đề kiểm tra" />
