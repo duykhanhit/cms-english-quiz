@@ -3,14 +3,18 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Header from "../../components/Header";
 import { Container, Table, Button, Row, Col } from "reactstrap";
+import { ToastContainer, toast } from "react-toastify";
 
-import { getExams, getMe } from "../../api";
+import { deleteExam, getExams, getMe } from "../../api";
 
 export default function Manage() {
   const [user, setUser] = useState({});
   const [token, setToken] = useState("");
   const [exams, setExams] = useState([]);
   const router = useRouter();
+
+  const notifySuccess = () => toast("Xoá thành công!");
+  const notifyFail = () => toast("Lỗi khi xoá. Vui lòng F5 để làm lại.");
 
   const handleGetMe = async (token) => {
     try {
@@ -38,6 +42,19 @@ export default function Manage() {
     } catch (error) {}
   };
 
+  const handleDeleteExam = async (token, examId) => {
+    const status = confirm("Bạn có muốn xoá đề thi này?");
+    if (!status) {
+      return;
+    }
+    try {
+      await deleteExam(token, examId);
+      notifySuccess();
+    } catch (error) {
+      notifyFail();
+    }
+  };
+
   const renderExams = (exams) => {
     return exams.map((exam, index) => {
       return (
@@ -50,7 +67,12 @@ export default function Manage() {
           </td>
           <td>{exam?.type}</td>
           <td>
-            <Button color="danger">Xoá</Button>
+            <Button
+              onClick={() => handleDeleteExam(token, exam._id)}
+              color="danger"
+            >
+              Xoá
+            </Button>
           </td>
         </tr>
       );
@@ -96,6 +118,7 @@ export default function Manage() {
           <tbody>{exams && renderExams(exams)}</tbody>
         </Table>
       </Container>
+      <ToastContainer />
     </div>
   );
 }

@@ -33,6 +33,14 @@ export const getExamDetail = (token, examId) =>
     },
   });
 
+export const deleteExam = (token, examId) =>
+  axios.delete(`${baseUrl}/exam/${examId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
 export const createExam = (token, exam) =>
   axios.post(`${baseUrl}/exam`, exam, {
     headers: {
