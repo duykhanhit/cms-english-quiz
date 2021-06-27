@@ -10,7 +10,7 @@ export default function CardQues(props) {
     content: "",
   });
 
-  const { exam } = props;
+  const { exam, examId } = props;
 
   const [ans, setAns] = useState([
     {
